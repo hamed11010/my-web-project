@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee House - Menu</title>
+    <link rel="stylesheet" href="../css files/boudz.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <script src="../js files/hatem.js"></script>
+</head>
+<body>
+    <div class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-layout-text-sidebar" viewBox="0 0 16 16">
+            <path d="M3.5 3a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM3 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1z"/>
+            <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm12-1v14h2a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zm-1 0H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h9z"/>
+        </svg></i>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-menu">
+            <button class="sidebar-btn" onclick="window.location.href='ahmed.html'">
+                <i class="fas fa-home"></i> Home
+            </button>
+            <button class="sidebar-btn" onclick="window.location.href='aboutus.html'">
+                <i class="bi bi-people-fill"></i> About Us
+            </button>
+            <button class="sidebar-btn" onclick="window.location.href='hatem.html'">
+                <i class="fas fa-shopping-cart"></i> Your Cart
+            </button>
+        </div>
+    </div>
+
+    
+    <div class="overlay" id="overlay"></div>
+    <header class="navbar">
+        <div class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="wheat" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M.5 6a.5.5 0 0 0-.488.608l1.652 7.434A2.5 2.5 0 0 0 4.104 16h5.792a2.5 2.5 0 0 0 2.44-1.958l.131-.59a3 3 0 0 0 1.3-5.854l.221-.99A.5.5 0 0 0 13.5 6zM13 12.5a2 2 0 0 1-.316-.025l.867-3.898A2.001 2.001 0 0 1 13 12.5M2.64 13.825 1.123 7h11.754l-1.517 6.825A1.5 1.5 0 0 1 9.896 15H4.104a1.5 1.5 0 0 1-1.464-1.175"/>
+                <path d="m4.4.8-.003.004-.014.019a4 4 0 0 0-.204.31 2 2 0 0 0-.141.267c-.026.06-.034.092-.037.103v.004a.6.6 0 0 0 .091.248c.075.133.178.272.308.445l.01.012c.118.158.26.347.37.543.112.2.22.455.22.745 0 .188-.065.368-.119.494a3 3 0 0 1-.202.388 5 5 0 0 1-.253.382l-.018.025-.005.008-.002.002A.5.5 0 0 1 3.6 4.2l.003-.004.014-.019a4 4 0 0 0 .204-.31 2 2 0 0 0 .141-.267c.026-.06.034-.092.037-.103a.6.6 0 0 0-.09-.252A4 4 0 0 0 3.6 2.8l-.01-.012a5 5 0 0 1-.37-.543A1.53 1.53 0 0 1 3 1.5c0-.188.065-.368.119-.494.059-.138.134-.274.202-.388a6 6 0 0 1 .253-.382l.025-.035A.5.5 0 0 1 4.4.8m3 0-.003.004-.014.019a4 4 0 0 0-.204.31 2 2 0 0 0-.141.267c-.026.06-.034.092-.037.103v.004a.6.6 0 0 0 .091.248c.075.133.178.272.308.445l.01.012c.118.158.26.347.37.543.112.2.22.455.22.745 0 .188-.065.368-.119.494a3 3 0 0 1-.202.388 5 5 0 0 1-.253.382l-.018.025-.005.008-.002.002A.5.5 0 0 1 6.6 4.2l.003-.004.014-.019a4 4 0 0 0 .204-.31 2 2 0 0 0 .141-.267c.026-.06.034-.092.037-.103a.6.6 0 0 0-.09-.252A4 4 0 0 0 6.6 2.8l-.01-.012a5 5 0 0 1-.37-.543A1.53 1.53 0 0 1 6 1.5c0-.188.065-.368.119-.494.059-.138.134-.274.202-.388a6 6 0 0 1 .253-.382l.025-.035A.5.5 0 0 1 7.4.8m3 0-.003.004-.014.019a4 4 0 0 0-.204.31 2 2 0 0 0-.141.267c-.026.06-.034.092-.037.103v.004a.6.6 0 0 0 .091.248c.075.133.178.272.308.445l.01.012c.118.158.26.347.37.543.112.2.22.455.22.745 0 .188-.065.368-.119.494a3 3 0 0 1-.202.388 5 5 0 0 1-.252.382l-.019.025-.005.008-.002.002A.5.5 0 0 1 9.6 4.2l.003-.004.014-.019a4 4 0 0 0 .204-.31 2 2 0 0 0 .141-.267c.026-.06.034-.092.037-.103a.6.6 0 0 0-.09-.252A4 4 0 0 0 9.6 2.8l-.01-.012a5 5 0 0 1-.37-.543A1.53 1.53 0 0 1 9 1.5c0-.188.065-.368.119-.494.059-.138.134-.274.202-.388a6 6 0 0 1 .253-.382l.025-.035A.5.5 0 0 1 10.4.8"/>
+            </svg>
+            <h1>Coffee House</h1>
+        </div>
+        <button class="show-cart-btn" onclick="window.location.href='hatem.html'">
+            Show Cart
+            <span class="cart-count" style="display: none;">0</span>
+        </button>
+    </header>
+    <nav class="category-nav">
+        <div class="category-buttons">
+            <button onclick="scrollToCategory('cold-coffee')">Cold Coffee</button>
+            <button onclick="scrollToCategory('hot-drinks')">Hot Drinks</button>
+            <button onclick="scrollToCategory('smoothies')">Smoothies</button>
+            <button onclick="scrollToCategory('cold-drinks')">Cold Drinks</button>
+            <button onclick="scrollToCategory('breakfast')">Breakfast</button>
+            <button onclick="scrollToCategory('dessert')">Dessert</button>
+        </div>
+    </nav>
+
+    <div class="products-page">
+        <h1>Our Menu</h1>
+        
+        <div class="products-container">
+            <h3 id="cold-coffee" class="category-heading">Cold Coffee</h3>
+            
+            <div class="product">
+                <img src="../images/project images/iced mocha.jpg" alt="White Mocha">
+                <div class="product-details">
+                    <h2>White Mocha</h2>
+                    <p>Classic espresso highlighted with a touch of creaminess</p>
+                    <p class="price">LE 100.00</p>
+                    <button>Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product">
+                <img src="../images/project images/iced spanish latte.jpg" alt="Ice Spanish Latte">
+                <div class="product-details">
+                    <h2>Ice Spanish Latte</h2>
+                    <p>The perfect balance of rich espresso with creamy steamed milk</p>
+                    <p class="price">LE 100.00</p>
+                    <button>Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product">
+                <img src="../images/project images/flat white.jpg" alt="Flat White">
+                <div class="product-details">
+                    <h2>Flat White</h2>
+                    <p>The perfect balance of espresso and velvety steamed milk</p>
+                    <p class="price">LE 120.00</p>
+                    <button>Add to Cart</button>
+                </div>
+            </div>
+
+
+            
+            <h3 id="smoothies" class="category-heading">Smoothies</h3>
+            
+            <div class="product">
+                <img src="../images/project images/mango smoothie.jpg" alt="Mango Smoothie">
+                <div class="product-details">
+                    <h2>Mango Smoothie</h2>
+                    <p>The tropical fusion of ripe mangoes and creamy smoothness</p>
+                    <p class="price">LE 70.00</p>
+                    <button>Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product">
+                <img src="../images/project images/strawberry.jpg" alt="Strawberry Smoothie">
+                <div class="product-details">
+                    <h2>Strawberry Smoothie</h2>
+                    <p>The refreshing blend of sweet strawberries and creamy smoothness</p>
+                    <p class="price">LE 60.00</p>
+                    <button>Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product">
+                <img src="../images/project images/blueberry smothie.jpg" alt="Blueberry Smoothie">
+                <div class="product-details">
+                    <h2>Blueberry Smoothie</h2>
+                    <p>The perfect mix of juicy blueberries and velvety smoothness</p>
+                    <p class="price">LE 60.00</p>
+                    <button>Add to Cart</button>
+                </div>
+            </div>
+
+          
+
+            <h3 id="hot-drinks" class="category-heading">Hot Drinks</h3>
+            
+             <div class="product">
+                <img src="../images/project images/tea.jpg" alt="Black Tea">
+                <div class="product-details">
+                    <h2>Black Tea</h2>
+                    <p>Classic black tea, bold and timeless with a smooth finish</p>
+                    <p class="price">LE 35</p>
+                    <button>Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product">
+                <img src="../images/project images/green tea.jpg" alt="Green Tea">
+                <div class="product-details">
+                    <h2>Green Tea</h2>
+                    <p>Classic Green tea, bold and timeless with a smooth finish</p>
+                    <p class="price">LE 35</p>
+                    <button>Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product">
+                <img src="../images/project images/hot chocolate.jpg" alt="Hot Chocolate">
+                <div class="product-details">
+                    <h2>Hot Chocolate</h2>
+                    <p>Decadent chocolate warmth wrapped in a creamy, soothing finish</p>
+                    <p class="price">LE 55</p>
+                    <button>Add to Cart</button>
+                </div>
+            </div>
+            
+            <h3 id="cold-drinks" class="category-heading">Cold Drinks</h3>
+            <div class="product">
+                <img src="../images/project images/pepsi.jpeg" alt="pepsi">
+                <div class="product-details">
+                <h2>Pepsi</h2>
+                <p>"Smooth, sweet cola flavor with a lively carbonated punch—the timeless Pepsi taste."</p> 
+                <p class="price">LE 50</p>
+                <button>Add to Cart</button>
+               </div>
+             </div>
+
+            <div class="product">
+                <img src="../images/project images/sprite.jpeg" alt="Sprite">
+                <div class="product-details">
+                <h2>Sprite</h2>
+                <p>"Zesty lemon-lime fizz that slaps your thirst awake!"</p> 
+                <p class="price">LE 175</p>
+                <button>Add to Cart</button>
+               </div>
+             </div>
+
+             <div class="product">
+                <img src="../images/project images/Fanta orange blikje.jpeg" alt="fanta">
+                <div class="product-details">
+                <h2>Fanta</h2>
+                <p>"Fanta: Where fruit gets fizzy and boring gets banned!"</p> 
+                <p class="price">LE 45</p>
+                <button>Add to Cart</button>
+               </div>
+             </div>
+
+
+            
+            <h3 id="breakfast" class="category-heading">Breakfast</h3>
+            <div class="product">
+                <img src="../images/project images/crosiant.jpg" alt="croissant">
+                <div class="product-details">
+                <h2>Croissant</h2>
+                <p>Golden, crisp exterior with a soft, buttery interior</p> 
+                <p class="price">LE 45</p>
+                <button>Add to Cart</button>
+               </div>
+             </div>
+
+           
+
+             <div class="product">
+                <img src="../images/project images/cinnamon.jpg" alt="cinnamon">
+                <div class="product-details">
+                <h2>Cinnamon</h2>
+                <p>Spicy-sweet cinnamon blended into a perfect, fragrant treat</p> 
+                <p class="price">LE 70</p>
+                <button>Add to Cart</button>
+               </div>
+             </div>
+
+             <div class="product">
+                <img src="../images/project images/tuna.jpg" alt="turkey and cheese sandwidch">
+                <div class="product-details">
+                <h2>Turkey and Cheese sandwidch</h2>
+                <p>Savory turkey and melted cheese nestled between fresh, hearty bread</p> 
+                <p class="price">LE 110</p>
+                <button>Add to Cart</button>
+               </div>
+             </div>
+
+             <div class="product">
+                <img src="../images/project images/turkey.jpg" alt="tuna melt toastie">
+                <div class="product-details">
+                <h2>Tuna Melt Toastie</h2>
+                <p>Savory tuna and melted cheese toasted to perfection for a warm, comforting bite</p> 
+                <p class="price">LE 125</p>
+                <button>Add to Cart</button>
+               </div>
+             </div>
+            
+            <h3 id="dessert" class="category-heading">Dessert</h3>
+
+            <div class="product">
+                <img src="../images/project images/molten cake.jpg" alt="molten cake">
+                <div class="product-details">
+                <h2>Molten Cake</h2>
+                <p>warm chocolate cake with a gooey, decadent center, every bite a delight</p> 
+                <p class="price">LE 75</p>
+                <button>Add to Cart</button>
+               </div>
+             </div>
+
+             <div class="product">
+                <img src="../images/project images/chcolate ghariba.jpg" alt="pain au chocolat">
+                <div class="product-details">
+                <h2>Pain Au Chocolat</h2>
+                <p>Golden, crisp layers embracing smooth chocolate for the perfect biter</p> 
+                <p class="price">LE 65</p>
+                <button>Add to Cart</button>
+               </div>
+             </div>
+
+             <div class="product">
+                <img src="../images/project images/brownies.jpeg" alt="brownies">
+                <div class="product-details">
+                <h2>Brownies</h2>
+                <p>Rich chocolate brownies with a perfect balance of sweetness and depth</p> 
+                <p class="price">LE 60</p>
+                <button>Add to Cart</button>
+               </div>
+             </div>
+
+             <div class="product">
+                <img src="../images/project images/apple piue 2.jpg" alt="apple pie">
+                <div class="product-details">
+                <h2>Apple Pie</h2>
+                <p>Spiced apples encased in a buttery, flaky crust, a comforting classic</p> 
+                <p class="price">LE 65</p>
+                <button>Add to Cart</button>
+               </div>
+             </div>
+
+             
+            
+        </div>
+    </div>
+    <script src="../js files/hatem.js"></script>
+    <script src="../js files/boudz.js"></script>
+</body>
+</html>
