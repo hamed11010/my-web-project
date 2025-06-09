@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Coffee Shop</title>
+    <link rel="stylesheet" href="/css/hatem2.css">
+    <!-- Add SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+</head>
+<body>
+    <form id="checkout-form" method="post">
+        <h2>Checkout</h2>
+        <fieldset>
+            <legend>Delivery Information</legend>
+            <div class="form-group">
+                <label for="full-name">Full Name:</label>
+                <input type="text" id="full-name" name="full-name" required>
+                <span id="full-name-error" class="error"></span>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <span id="email-error" class="error"></span>
+            </div>
+            
+            <div class="form-group phone-input">
+                <label for="phone">Phone Number (Egypt):</label>
+                <div class="phone-prefix-container">
+                    <span class="phone-prefix">+20</span>
+                    <input type="tel" id="phone" name="phone" placeholder="1012345678" 
+                     pattern="[1-2][0-9]{9}" maxlength="10" required
+                     title="Egyptian phone number (10 digits starting with 1 or 2)">
+                </div>
+                <span id="phone-error" class="error"></span>
+            </div>
+            
+            <div class="form-group">
+                <label for="address">Full Address:</label>
+                <input type="text" id="address" name="address" required>
+                <span id="address-error" class="error"></span>
+            </div>
+        </fieldset>
+        
+        <fieldset>
+            <legend>Payment Method</legend>
+            <div class="payment-options">
+                <label class="payment-option">
+                    <input type="radio" name="payment" value="cash">
+                    <span>Cash on Delivery</span>
+                </label>
+                <label class="payment-option">
+                    <input type="radio" name="payment" value="card" checked>
+                    <span>Credit/Debit Card</span>
+                </label>
+            </div>
+            
+            <div id="card-details">
+                <div class="form-group">
+                    <label for="card-name">Name on Card:</label>
+                    <input type="text" id="card-name" name="card-name" required>
+                    <span id="card-name-error" class="error"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="card-number">Card Number:</label>
+                    <input type="text" id="card-number" name="card-number" 
+                           placeholder="1234 5678 9012 3456" required>
+                    <span id="card-number-error" class="error"></span>
+                </div>
+                
+                <div class="card-details-row">
+                    <div class="form-group">
+                        <label for="expiry">Expiry Date:</label>
+                        <input type="text" id="expiry" name="expiry" 
+                               placeholder="MM/YY" required>
+                        <span id="expiry-error" class="error"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cvv">CVV:</label>
+                        <input type="text" id="cvv" name="cvv" 
+                               placeholder="123" required>
+                        <span id="cvv-error" class="error"></span>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        
+        <fieldset class="order-summary">
+            <legend>Order Summary</legend>
+            <div id="order-items" class="order-items">
+                <!-- Order items will be dynamically added here -->
+            </div>
+            <div class="summary-totals">
+                <div class="summary-row subtotal">
+                    <span>Subtotal:</span>
+                    <span id="subtotal">LE 0.00</span>
+                </div>
+                <div class="summary-row discount" id="discount-row" style="display: none;">
+                    <span>Discount:</span>
+                    <span id="discount">LE 0.00</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total:</span>
+                    <span id="order-total">LE 0.00</span>
+                </div>
+            </div>
+        </fieldset>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Place Order</button>
+            <button type="button" class="btn btn-secondary" id="back-btn">Back to Cart</button>
+        </div>
+    </form>
+
+    <!-- Add SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Load Cart functionality first -->
+    <script src="/js/hatem.js"></script>
+    <!-- Then load checkout functionality -->
+    <script>
+    const API_BASE_URL = 'http://localhost:3000/api';
+
+    async function checkAuth() {
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('user') || 'null');
+        
+        if (!token || !user) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Access Denied',
+                text: 'Please log in to access this page'
+            }).then(() => {
+                window.location.href = '/login';
+            });
+            return false;
+        }
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/users/verify`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Invalid token');
+            }
+
+            return true;
+        } catch (error) {
+            console.error('Auth verification failed:', error);
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            Swal.fire({
+                icon: 'error',
+                title: 'Session Expired',
+                text: 'Please log in again'
+            }).then(() => {
+                window.location.href = '/login';
+            });
+            return false;
+        }
+    }
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', async () => {
+        if (!await checkAuth()) return;
+        
+        // Load cart
+        try {
+            const response = await fetch(`${API_BASE_URL}/cart`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch cart');
+            }
+
+            const cart = await response.json();
+            // Handle cart display logic here
+        } catch (error) {
+            console.error('Error loading cart:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to load cart'
+            });
+        }
+    });
+    </script>
+</body>
+</html>
