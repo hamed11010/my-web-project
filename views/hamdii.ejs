@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee House - Sign Up</title>
+    <link rel="stylesheet" href="/css/hamdii.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Add SweetAlert2 CSS and JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="signup-container">
+        <div class="signup-header">
+            <h2>Create Your Account</h2>
+            <p>Join Coffee House to enjoy our premium coffee experience</p>
+        </div>
+
+        <form id="signupForm">
+            <div class="name-fields">
+                <div class="form-group">
+                    <label for="firstName" class="form-label">First Name *</label>
+                    <input type="text" id="firstName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="lastName" class="form-label">Last Name *</label>
+                    <input type="text" id="lastName" class="form-control" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="username" class="form-label">Username *</label>
+                <input type="text" id="username" class="form-control" required>
+                <div id="usernameFeedback" class="feedback"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="email" class="form-label">Email Address *</label>
+                <input type="email" id="email" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone" class="form-label">Phone Number *</label>
+                <input type="tel" id="phone" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="userType" class="form-label">Account Type *</label>
+                <select id="userType" class="form-control" required>
+                    <option value="" disabled selected>Select account type</option>
+                    <option value="customer">Customer</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+
+            <div id="adminPrivileges" class="admin-privileges">
+                <h4>Admin Privileges</h4>
+                <ul>
+                    <li>Access to admin dashboard</li>
+                    <li>Manage products and inventory</li>
+                    <li>View sales reports</li>
+                    <li>Manage user accounts</li>
+                    <li>Create promotions and discounts</li>
+                </ul>
+                <p><strong>Note:</strong> Admin accounts must be verified by system administrator</p>
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">Password *</label>
+                <div class="password-input-container">
+                    <input type="password" id="password" class="form-control" required minlength="8">
+                    <span class="password-toggle" onclick="togglePasswordVisibility('password')">
+                        <i class="fas fa-eye"></i>
+                    </span>
+                </div>
+                <div class="password-requirements">
+                    <div id="lengthReq" class="requirement invalid">
+                        <i>•</i> At least 8 characters
+                    </div>
+                    <div id="lowerReq" class="requirement invalid">
+                        <i>•</i> Contains lowercase letter
+                    </div>
+                    <div id="upperReq" class="requirement invalid">
+                        <i>•</i> Contains uppercase letter
+                    </div>
+                    <div id="numberReq" class="requirement invalid">
+                        <i>•</i> Contains number
+                    </div>
+                    <div id="specialReq" class="requirement invalid">
+                        <i>•</i> Contains special character
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword" class="form-label">Confirm Password *</label>
+                <div class="password-input-container">
+                    <input type="password" id="confirmPassword" class="form-control" required>
+                    <span class="password-toggle" onclick="togglePasswordVisibility('confirmPassword')">
+                        <i class="fas fa-eye"></i>
+                    </span>
+                </div>
+                <div id="passwordMatch" class="feedback valid-feedback">Passwords match!</div>
+                <div id="passwordMismatch" class="feedback invalid-feedback">Passwords do not match</div>
+            </div>
+
+            <div class="form-group">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="termsCheck" required>
+                    <label class="form-check-label" for="termsCheck">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a> *</label>
+                    <div id="termsFeedback" class="feedback invalid-feedback">You must agree to the terms</div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-signup">Create Account</button>
+            <div class="login-link">
+                Already have an account? <a href="/login">Login here</a>
+            </div>
+        </form>
+    </div>
+
+    <script src="/js/hamdii.js"></script>
+</body>
+</html>

@@ -1,0 +1,466 @@
+.sidebar {
+    position: fixed;
+    left: -300px;
+    top: 0;
+    width: 250px;
+    height: 100vh;
+    background: saddlebrown;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+}
+
+.sidebar.active {
+    left: 0;
+}
+
+.sidebar-menu {
+    padding: 20px;
+    margin-top: 70px;
+}
+
+.sidebar-btn {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    margin-bottom: 10px;
+    background: peru;
+    color: wheat;
+    border: none;
+    border-radius: 4px;
+    text-align: left;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    transition: all 0.3s;
+}
+
+.sidebar-btn:hover {
+    background: chocolate;
+    transform: translateX(5px);
+}
+
+.sidebar-btn i {
+    margin-right: 10px;
+}
+
+.menu-toggle {
+    position: fixed;
+    left: 20px;
+    top: 20px;
+    font-size: 24px;
+    color: wheat;
+    cursor: pointer;
+    z-index: 1100;
+    background: rgba(0,0,0,0.7);
+    padding: 10px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #2c1810;
+    color: wheat;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+    display: none;
+}
+
+body.sidebar-open {
+    overflow: hidden;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.logo svg {
+    color: wheat;
+    width: 28px;
+    height: 28px;
+}
+
+.logo h1 {
+    color: wheat;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+.category-nav {
+    background: linear-gradient(to right, peru, saddlebrown);
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 70px;
+    z-index: 90;
+}
+
+.category-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.category-buttons button {
+    background: transparent;
+    color: wheat;
+    border: 1px solid wheat;
+    padding: 0.6rem 1.2rem;
+    border-radius: 25px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    transition: all 0.3s;
+    min-width: 120px;
+}
+
+.category-buttons button:hover {
+    background: wheat;
+    color: saddlebrown;
+}
+
+.products-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.products-page h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: sienna;
+    font-family: 'Playfair Display', serif;
+}
+
+.products-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+}
+
+.product {
+    flex: 1 1 calc(33.333% - 20px);
+    min-width: 250px;
+    width: calc(50% - 10px);
+    border: 1px solid gainsboro;
+    border-radius: 8px;
+    overflow: hidden;
+    background: white;
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+}
+
+.product:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.product img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.product-details {
+    padding: 20px;
+    text-align: center;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.product h2 {
+    font-size: 1.4rem;
+    margin-bottom: 12px;
+    color: darkslategray;
+    font-family: 'Playfair Display', serif;
+}
+
+.product p {
+    color: dimgray;
+    font-size: 1rem;
+    margin-bottom: 15px;
+    line-height: 1.5;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.price {
+    font-weight: bold;
+    color: goldenrod;
+    font-size: 1.3rem;
+    margin: 15px 0;
+}
+
+.product button {
+    background-color: peru;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+    width: 100%;
+    max-width: 200px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.product button:hover {
+    background-color: saddlebrown;
+}
+
+.category-heading {
+    width: 100%;
+    text-align: center;
+    margin: 30px 0 15px;
+    color: sienna;
+    font-size: 1.5rem;
+    border-bottom: 2px solid goldenrod;
+    padding-bottom: 5px;
+    font-family: 'Playfair Display', serif;
+}
+
+.product:hover img {
+    transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+    .product {
+        width: 100%;
+    }
+    
+    .product img {
+        height: 250px;
+    }
+    
+    .category-buttons button {
+        padding: 0.5rem 1rem;
+        min-width: 100px;
+    }
+}
+
+.show-cart-btn {
+    background-color: wheat;
+    color: #2c1810;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.show-cart-btn:hover {
+    background-color: #e6d5b8;
+    transform: scale(1.05);
+}
+
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #e74c3c;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+    min-width: 18px;
+    text-align: center;
+}
+
+/* Admin Actions Styling */
+.product-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.admin-actions {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    width: 100%;
+}
+
+.edit-btn, .delete-btn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    min-width: 100px;
+    justify-content: center;
+}
+
+.edit-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.delete-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.edit-btn:hover {
+    background-color: #45a049;
+}
+
+.delete-btn:hover {
+    background-color: #da190b;
+}
+
+/* Modal Styling */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 8px;
+    position: relative;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: black;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.form-group textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.save-btn, .cancel-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.save-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.cancel-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.save-btn:hover {
+    background-color: #45a049;
+}
+
+.cancel-btn:hover {
+    background-color: #da190b;
+}
+
+/* Error message styling */
+.error-message {
+    color: #f44336;
+    font-size: 14px;
+    margin-top: 5px;
+    display: none;
+}
+
+/* Responsive styles for admin actions */
+@media (max-width: 768px) {
+    .product-actions {
+        flex-direction: column;
+    }
+
+    .admin-actions {
+        flex-direction: column;
+    }
+
+    .modal-content {
+        width: 95%;
+        margin: 10% auto;
+    }
+}
