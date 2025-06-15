@@ -1,0 +1,86 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.table {
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table thead th {
+    background-color: #6F4E37;
+    color: white;
+    font-weight: 500;
+    padding: 12px;
+    border: none;
+}
+
+.table tbody td {
+    padding: 12px;
+    vertical-align: middle;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+.alert {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 4px;
+}
+
+.alert-info {
+    background-color: #cce5ff;
+    border: 1px solid #b8daff;
+    color: #004085;
+}
+
+h1 {
+    color: #6F4E37;
+    font-weight: 600;
+    margin-bottom: 30px;
+}
+
+/* Back Button Styles */
+.back-button {
+    position: fixed;
+    left: 20px;
+    top: 20px;
+    color: #333;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 1.1rem;
+    z-index: 1000;
+    padding: 8px 12px;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transform: translateX(-2px);
+}
+
+.back-button i {
+    font-size: 1.2rem;
+} 

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation - Coffee Shop</title>
+    <link rel="stylesheet" href="/css/order-confirmation.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+</head>
+<body>
+    <div class="confirmation-container">
+        <!-- Wait Time Button -->
+        <button id="wait-time-btn" class="wait-time-btn">
+            <span class="timer-icon">⏱️</span>
+            <span id="wait-time">3:00</span>
+        </button>
+
+        <div class="delivery-animation">
+            <div class="scene">
+                <div class="motorcycle">
+                    <div class="body"></div>
+                    <div class="front-wheel"></div>
+                    <div class="back-wheel"></div>
+                    <div class="handlebar"></div>
+                    <div class="seat"></div>
+                    <div class="rider">
+                        <div class="head"></div>
+                        <div class="body"></div>
+                    </div>
+                </div>
+                <div class="road"></div>
+            </div>
+        </div>
+        
+        <div class="message">
+            <h2>Your Order is on its way!</h2>
+            <p>Our delivery agent is preparing your delicious coffee and heading your way.</p>
+            <div class="timer-container">
+                <p>Estimated delivery time: <span id="delivery-timer">3:00</span></p>
+            </div>
+            <div class="order-details">
+                <h3>Order Details</h3>
+                <div class="detail-row">
+                    <span>Order ID:</span>
+                    <span><%= order._id %></span>
+                </div>
+                <div class="detail-row">
+                    <span>Subtotal:</span>
+                    <span>LE <%= order.totalAmount.toFixed(2) %></span>
+                </div>
+                <% if (order.discountApplied > 0) { %>
+                <div class="detail-row">
+                    <span>Discount:</span>
+                    <span>- LE <%= order.discountApplied.toFixed(2) %></span>
+                </div>
+                <% } %>
+                <% if (order.promoCodeUsed) { %>
+                    <div class="detail-row">
+                        <span>Promo Code:</span>
+                        <span><%= order.promoCodeUsed %></span>
+                    </div>
+                <% } %>
+                <div class="detail-row total">
+                    <span>Total Amount:</span>
+                    <span>LE <%= order.finalAmount.toFixed(2) %></span>
+                </div>
+                <div class="detail-row">
+                    <span>Payment Method:</span>
+                    <span><%= order.paymentMethod %></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button id="edit-order-btn" class="btn">Edit Order</button>
+            <button id="cancel-order-btn" class="btn btn-danger">Cancel Order</button>
+        </div>
+        <div id="thank-you-section" class="thank-you-section" style="display: none;">
+            <h2>Order Delivered!</h2>
+            <p>Thank you for choosing our coffee shop!</p>
+            <button id="thank-you-btn" class="btn">Back to Home</button>
+            <div id="rating-section" class="rating-section" style="display: none; margin-top: 2rem;">
+                <h3>Your opinion matters!</h3>
+                <p>How was your order? Please rate your experience:</p>
+                <div id="stars-container" class="star-rating"></div>
+                <input type="hidden" id="rating-value" value="0">
+                <div id="rating-comment-container" style="display: none; margin-top: 1rem;">
+                    <p id="rating-comment-message" style="color: #dc3545; margin-bottom: 0.5rem;">We're sorry to hear that! How can we improve your experience?</p>
+                    <textarea id="rating-comment" rows="3" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;"></textarea>
+                </div>
+                <button id="submit-rating-btn" class="btn" style="margin-top: 1rem;">Submit Rating</button>
+                <div id="rating-message" class="rating-message" style="margin-top: 1rem;"></div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/hatem.js"></script>
+    <script>
+        // Pass order data to JavaScript
+        window.orderData = {
+            id: '<%= order._id %>',
+            status: '<%= order.status %>',
+            estimatedCompletionTime: '<%= order.estimatedCompletionTime %>',
+            totalAmount: <%= order.finalAmount %>,
+            paymentMethod: '<%= order.paymentMethod %>'
+        };
+    </script>
+    <script src="/js/order-confirmation.js"></script>
+</body>
+</html> 

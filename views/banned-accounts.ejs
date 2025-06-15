@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banned Accounts - Admin Panel</title>
+    <link rel="stylesheet" href="/css/banned-accounts.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <a href="/" class="back-button">
+        <i class="fas fa-arrow-left"></i> Back
+    </a>
+
+    <%- include('partials/admin-navbar') %>
+
+    <div class="container mt-4">
+        <h1 class="mb-4">Banned Accounts Management</h1>
+        
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Ban Reason</th>
+                        <th>Banned At</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="banned-users-table">
+                    <!-- Banned users will be loaded here -->
+                </tbody>
+            </table>
+        </div>
+
+        <div id="no-banned-users" class="alert alert-info" style="display: none;">
+            No banned users found.
+        </div>
+    </div>
+
+    <script src="/js/banned-accounts.js"></script>
+</body>
+</html> 

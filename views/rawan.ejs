@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+    <div class="header">
+    <h1>Store Ordering</h1>
+    <p>Welcome, Admin</p>
+    </div>
+    <head>
+        <title>Coffee Shop- Store Ordering</title>
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/css/rawan.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </head>
+    <body method="post">
+        <a href="/" class="back-button">
+            <i class="fas fa-arrow-left"></i> Back
+        </a>
+        <div class="navigation-tabs">
+            <button class="nav-buttons" onclick="showSection('orders', event)"><b>Customer Order</b></button>
+            <button class="nav-buttons" onclick="showSection('warehouse', event)"><b>Warehouse</b></button>
+            <button class="nav-buttons" onclick="showSection('add-product', event)"><b>Add Product</b></button>
+            <button class="nav-buttons" onclick="showSection('add-supplier', event)"><b>Add Supplier</b></button>
+        </div>
+        <hr>
+        <section id="orders" class="content-section" style="display: block;">
+        <h2>Customer Orders </h2>
+        <div class="order-filtering">
+        <select>
+            <option> All Orders</option>
+            <option>Processing</option>
+            <option >Cancelled</option>
+            <option>Completed</option>
+        </select>
+        <input type="date" id="order-date-filtering">
+        <button id="filter">Filter</button>
+        </div>
+        <table id="Orders-table">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Items</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Feedback</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (typeof orders !== 'undefined' && orders.length > 0) { %>
+                    <% orders.forEach(order => { %>
+                        <tr>
+                            <td><%= order._id %></td>
+                            <td><%= order.user ? order.user.name : 'N/A' %></td>
+                            <td>
+                                <ul class="order-items">
+                                    <% if (order.items && order.items.length > 0) { %>
+                                        <% order.items.forEach(item => { %>
+                                            <li>
+                                                <%= item.product ? item.product.name : 'Unknown Product' %> x <%= item.quantity %>
+                                                <% if (item.product) { %>
+                                                    (LE <%= item.price.toFixed(2) %> each)
+                                                <% } %>
+                                            </li>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <li>No items</li>
+                                    <% } %>
+                                </ul>
+                            </td>
+                            <td>LE <%= order.finalAmount ? order.finalAmount.toFixed(2) : '0.00' %></td>
+                            <td>
+                                <span class="badge <%= order.status === 'completed' ? 'bg-success' : 
+                                              order.status === 'preparing' ? 'bg-warning' : 
+                                              order.status === 'in-transit' ? 'bg-info' : 
+                                              'bg-danger' %>">
+                                    <%= order.status || 'pending' %>
+                                </span>
+                            </td>
+                            <td><%= order.createdAt ? order.createdAt.toLocaleDateString() : 'N/A' %></td>
+                            <td>
+                                <button class="action-btn view" onclick="viewOrderFeedback('<%= order._id %>', '<%= order.rating || "" %>', '<%= order.ratingComment ? order.ratingComment.replace(/'/g, "\\'") : "" %>')">
+                                    <i class="fas fa-eye"></i> View
+                                </button>
+                                <button class="action-btn delete" onclick="deleteOrder('<%= order._id %>')">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </td>
+                        </tr>
+                    <% }); %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="7" class="text-center">No orders found</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+        </section>
+        <section id="warehouse" class="content-section" style="display: none;">
+            <h2>Warehouse Management</h2>
+            <div class="warehouse-filter-container">
+                <label for="warehouse-category-filter">Filter by Category:</label>
+                <select id="warehouse-category-filter">
+                    <option value="everything">All Categories</option>
+                    <option value="Cold Coffee">Cold Coffee</option>
+                    <option value="Hot Drinks">Hot Drinks</option>
+                    <option value="Smoothies">Smoothies</option>
+                    <option value="Cold Drinks">Cold Drinks</option>
+                    <option value="Breakfast">Breakfast</option>
+                    <option value="Dessert">Dessert</option>
+                </select>
+            </div>
+            <div id="category-totals-section"></div>
+            <table class="inventory-table">
+                <tr>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Category</th>
+                    <th>Current Stock</th>
+                    <th>Unit</th>
+                    <th>Reorder Level</th>
+                    <th>Last Updated</th>
+                    <th>Actions</th>
+                </tr>
+                <tbody id="warehouse-table-body"></tbody>
+            </table>
+        </section>
+        <section id="add-product" class="content-section" style="display: none;">
+        <h2>Add/Edit Products</h2>
+        <div class="product-form">
+            <form id="productForm" novalidate onsubmit="return false;">
+                <div class="form-group">
+                    <label for="productName">Product Name:</label>
+                    <input type="text" id="productName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="productDescription">Description:</label>
+                    <textarea id="productDescription" name="description" required minlength="10" maxlength="500"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="productCategory">Category:</label>
+                    <select id="productCategory" name="category" required>
+                        <option value="">Select Category</option>
+                        <option value="Cold Coffee">Cold Coffee</option>
+                        <option value="Hot Drinks">Hot Drinks</option>
+                        <option value="Smoothies">Smoothies</option>
+                        <option value="Cold Drinks">Cold Drinks</option>
+                        <option value="Breakfast">Breakfast</option>
+                        <option value="Dessert">Dessert</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="productImage">Product Image</label>
+                    <div class="image-selector">
+                        <select id="productImage" name="image" required>
+                            <option value="">Select an image</option>
+                            <option value="tea.jpg">Tea</option>
+                            <option value="sprite.jpeg">Sprite</option>
+                            <option value="apple piue 2.jpg">Apple Pie</option>
+                            <option value="crosiant.jpg">Croissant</option>
+                            <option value="molten cake.jpg">Molten Cake</option>
+                            <option value="chcolate ghariba.jpg">Chocolate Ghariba</option>
+                            <option value="brownies.jpeg">Brownies</option>
+                            <option value="strawberry.jpg">Strawberry</option>
+                            <option value="tuna.jpg">Tuna</option>
+                            <option value="Fanta orange blikje.jpeg">Fanta Orange</option>
+                            <option value="flat white.jpg">Flat White</option>
+                            <option value="blueberry smothie.jpg">Blueberry Smoothie</option>
+                            <option value="iced mocha.jpg">Iced Mocha</option>
+                            <option value="pepsi.jpeg">Pepsi</option>
+                            <option value="green tea.jpg">Green Tea</option>
+                            <option value="molten lavacake.jpeg">Molten Lava Cake</option>
+                            <option value="apple pie.jpeg">Apple Pie</option>
+                            <option value="iced spanish latte.jpg">Iced Spanish Latte</option>
+                            <option value="hot chocolate.jpg">Hot Chocolate</option>
+                            <option value="coffee.jpeg">Coffee</option>
+                            <option value="cinnamon.jpg">Cinnamon</option>
+                            <option value="Delicious Pizza.jpeg">Pizza</option>
+                            <option value="mango smoothie.jpg">Mango Smoothie</option>
+                            <option value="turkey.jpg">Turkey</option>
+                            <option value="Fotos Croissant _ Freepik.jpeg">Croissant</option>
+                        </select>
+                        <div id="imagePreview" class="image-preview"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="productPrice">Price:</label>
+                    <input type="number" id="productPrice" name="price" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="productStock">Initial Stock:</label>
+                    <input type="number" id="productStock" name="initialStock" required min="0">
+                </div>
+                <div class="form-group">
+                    <label for="productMinStock">Minimum Stock Level:</label>
+                    <input type="number" id="productMinStock" name="reorderLevel" required min="0">
+                </div>
+                <div class="form-group">
+                    <label for="productUnit">Unit:</label>
+                    <select id="productUnit" name="unit" required>
+                        <option value="pcs">Pieces</option>
+                        <option value="kg">Kilograms</option>
+                        <option value="litre">Liters</option>
+                        <option value="box">Box</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-btn">Add Product</button>
+            </form>
+        </div>
+        </section>
+        <section id="add-supplier" class="content-section" style="display: none;">
+        <h2>Add Supplier</h2>
+        <div class="supplier-form">
+            <form id="supplierForm">
+                <div class="form-group">
+                    <label for="supplierName">Supplier Name:</label>
+                    <input type="text" id="supplierName" required>
+                </div>
+                <div class="form-group">
+                    <label for="supplierEmail">Email:</label>
+                    <input type="email" id="supplierEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="supplierPhone">Phone:</label>
+                    <input type="tel" id="supplierPhone" required>
+                </div>
+                <div class="form-group">
+                    <label for="supplierAddress">Address:</label>
+                    <textarea id="supplierAddress" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Add Supplier</button>
+            </form>
+        </div>
+        </section>
+        <footer>
+            <p>&copy; 2023 Coffee Shop. All rights reserved.</p>
+        </footer>
+
+        <script>
+        const API_BASE_URL = 'http://localhost:5000/api';
+
+        async function checkAuth() {
+            try {
+                // First verify the token
+                const verifyResponse = await fetch(`${API_BASE_URL}/users/verify`, {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+
+                if (!verifyResponse.ok) {
+                    throw new Error('Invalid token');
+                }
+
+                const userData = await verifyResponse.json();
+                
+                if (userData.user.role !== 'admin') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Access Denied',
+                        text: 'You must be an admin to access this page'
+                    }).then(() => {
+                        window.location.href = '/';
+                    });
+                    return false;
+                }
+
+                return true;
+            } catch (error) {
+                console.error('Auth verification failed:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Session Expired',
+                    text: 'Please log in again'
+                }).then(() => {
+                    window.location.href = '/login';
+                });
+                return false;
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!await checkAuth()) return;
+            
+            // Load orders
+            try {
+                const response = await fetch(`${API_BASE_URL}/orders`, {
+                    credentials: 'include'
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch orders');
+                }
+
+                const orders = await response.json();
+                // Handle orders display logic here
+            } catch (error) {
+                console.error('Error loading orders:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Failed to load orders'
+                });
+            }
+        });
+
+        function showSection(sectionId, event) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Show the selected section
+            document.getElementById(sectionId).style.display = 'block';
+            
+            // Update active button
+            document.querySelectorAll('.nav-buttons').forEach(button => {
+                button.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Load section-specific data
+            if (sectionId === 'orders') {
+                loadOrders();
+            } else if (sectionId === 'warehouse') {
+                loadCategoryTotals();
+            }
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize the page with orders section
+            const ordersSection = document.getElementById('orders');
+            if (ordersSection) {
+                ordersSection.style.display = 'block';
+            }
+            
+            // Set the first nav button as active
+            const firstNavButton = document.querySelector('.nav-buttons');
+            if (firstNavButton) {
+                firstNavButton.classList.add('active');
+            }
+            
+            // Load initial data
+            loadOrders();
+            loadCategoryTotals();
+        });
+        </script>
+    </body>
+    <script src="/js/rawan.js"></script>
+    <script>
+        console.log('rawan.ejs script loaded');
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded');
+            // Initialize the page
+            loadOrders();
+            loadCategoryTotals();
+        });
+    </script>
+</html>
+

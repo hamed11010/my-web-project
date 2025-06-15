@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/admin-dashboard.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <nav class="admin-sidebar">
+            <div class="sidebar-header">
+                <h3>Admin Panel</h3>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="active" data-section="dashboard">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </li>
+                <li data-section="users">
+                    <i class="fas fa-users"></i>
+                    <span>User Management</span>
+                </li>
+                <li data-section="sales">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Sales Analytics</span>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="content-section active">
+                <div class="section-header">
+                    <h2>Dashboard Overview</h2>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-users"></i>
+                        <div class="stat-info">
+                            <h3>Total Users</h3>
+                            <p><%= totalUsers %></p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-shopping-bag"></i>
+                        <div class="stat-info">
+                            <h3>Total Orders</h3>
+                            <p><%= totalOrders %></p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-dollar-sign"></i>
+                        <div class="stat-info">
+                            <h3>Total Sales</h3>
+                            <p>$<%= totalSales.toFixed(2) %></p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-chart-line"></i>
+                        <div class="stat-info">
+                            <h3>Total Profit</h3>
+                            <p>$<%= totalProfit.toFixed(2) %></p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-percentage"></i>
+                        <div class="stat-info">
+                            <h3>Profit Margin</h3>
+                            <p><%= profitMargin %>%</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="charts-container">
+                    <div class="chart-card">
+                        <h3>Sales Overview</h3>
+                        <canvas id="salesChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Top Products</h3>
+                        <canvas id="productsChart"></canvas>
+                    </div>
+                </div>
+                <div class="recent-orders">
+                    <h2>Recent Orders</h2>
+                    <% if (recentOrders && recentOrders.length > 0) { %>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Payment</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% recentOrders.forEach(order => { %>
+                                    <tr>
+                                        <td><%= order._id %></td>
+                                        <td><%= order.user ? order.user.name : 'N/A' %></td>
+                                        <td>$<%= (order.totalAmount || 0).toFixed(2) %></td>
+                                        <td><%= order.status %></td>
+                                        <td><%= order.paymentStatus %></td>
+                                        <td>
+                                            <% if (order.status !== 'completed' || order.paymentStatus !== 'paid') { %>
+                                                <button onclick="completeOrder('<%= order._id %>')" class="btn-complete">Complete Order</button>
+                                            <% } else { %>
+                                                <span class="status-completed">Completed</span>
+                                            <% } %>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    <% } else { %>
+                        <p>No recent orders</p>
+                    <% } %>
+                </div>
+            </section>
+
+            <!-- Users Section -->
+            <section id="users" class="content-section">
+                <div class="section-header">
+                    <h2>User Management</h2>
+                    <div class="search-box">
+                        <input type="text" id="userSearch" placeholder="Search users...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table" id="usersTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Orders</th>
+                                <th>Total Spent</th>
+                                <th>Profit</th>
+                                <th>Joined Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Users will be loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Sales Section -->
+            <section id="sales" class="content-section">
+                <div class="section-header">
+                    <h2>Sales Analytics</h2>
+                    <div class="date-filter">
+                        <select id="salesPeriod">
+                            <option value="7">Last 7 Days</option>
+                            <option value="30">Last 30 Days</option>
+                            <option value="90">Last 90 Days</option>
+                            <option value="365">Last Year</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="sales-grid">
+                    <div class="sales-card">
+                        <h3>Revenue Overview</h3>
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                    <div class="sales-card">
+                        <h3>Top Selling Products</h3>
+                        <div class="table-responsive">
+                            <table class="table" id="topProductsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Units Sold</th>
+                                        <th>Revenue</th>
+                                        <th>Cost</th>
+                                        <th>Profit</th>
+                                        <th>Margin</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Top products will be loaded dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- User Details Modal -->
+    <div class="modal fade" id="userDetailsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">User Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- User details will be loaded dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/admin-dashboard.js"></script>
+    <script>
+    async function completeOrder(orderId) {
+        try {
+            const response = await fetch(`/api/orders/${orderId}/complete`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to complete order');
+            }
+
+            // Refresh the page to show updated data
+            window.location.reload();
+        } catch (error) {
+            console.error('Error completing order:', error);
+            alert('Failed to complete order. Please try again.');
+        }
+    }
+    </script>
+</body>
+</html> 
