@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Coffee Shop</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/hatem2.css">
+    <!-- Add SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+</head>
+<body>
+    <form id="checkout-form">
+        <h2>Checkout</h2>
+        <fieldset>
+            <legend>Delivery Information</legend>
+            <div class="form-group">
+                <label for="full-name">Full Name:</label>
+                <input type="text" id="full-name" name="full-name" pattern="[A-Za-z\s]+" required>
+                <span id="full-name-error" class="error"></span>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <span id="email-error" class="error"></span>
+            </div>
+            
+            <div class="form-group phone-input">
+                <label for="phone">Phone Number (Egypt):</label>
+                <div class="phone-prefix-container">
+                    <span class="phone-prefix">+20</span>
+                    <input type="tel" id="phone" name="phone" placeholder="1012345678" 
+                           pattern="01[0125][0-9]{8}" maxlength="11" required
+                           title="Egyptian phone number (11 digits starting with 01 followed by 0,1,2, or 5)">
+                </div>
+                <span id="phone-error" class="error"></span>
+            </div>
+            
+            <div class="form-group">
+                <label for="address">Full Address:</label>
+                <input type="text" id="address" name="address" required>
+                <span id="address-error" class="error"></span>
+            </div>
+        </fieldset>
+        
+        <fieldset>
+            <legend>Payment Method</legend>
+            <div class="payment-options">
+                <label class="payment-option">
+                    <input type="radio" name="payment" value="cash" id="cash-payment">
+                    <span>Cash on Delivery</span>
+                </label>
+                <label class="payment-option">
+                    <input type="radio" name="payment" value="card" id="card-payment" checked>
+                    <span>Credit/Debit Card</span>
+                </label>
+            </div>
+            
+            <div id="card-details">
+                <div class="form-group">
+                    <label for="card-name">Name on Card:</label>
+                    <input type="text" id="card-name" name="card-name" pattern="[A-Za-z\s]+" required>
+                    <span id="card-name-error" class="error"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="card-number">Card Number:</label>
+                    <input type="text" id="card-number" name="card-number" 
+                           placeholder="1234 5678 9012 3456" maxlength="19" required>
+                    <span id="card-number-error" class="error"></span>
+                </div>
+                
+                <div class="card-details-row">
+                    <div class="form-group">
+                        <label for="expiry">Expiry Date:</label>
+                        <input type="text" id="expiry" name="expiry" 
+                               placeholder="MM/YY" maxlength="5" required>
+                        <span id="expiry-error" class="error"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cvv">CVV:</label>
+                        <input type="text" id="cvv" name="cvv" 
+                               placeholder="123" maxlength="3" required>
+                        <span id="cvv-error" class="error"></span>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        
+        <fieldset class="order-summary">
+            <legend>Order Summary</legend>
+            <div id="order-items" class="order-items">
+                <% if (cart && cart.items && cart.items.length > 0) { %>
+                    <% cart.items.forEach((item, index) => { %>
+                        <div class="order-item">
+                            <span class="item-name"><%= item.name %></span>
+                            <span class="item-quantity">x<%= item.quantity %></span>
+                            <span class="item-price">LE <%= (item.price * item.quantity).toFixed(2) %></span>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <p>No items in cart</p>
+                <% } %>
+            </div>
+            <div class="summary-totals">
+                <div class="summary-row subtotal">
+                    <span>Subtotal:</span>
+                    <span id="subtotal">LE <%= cart.subtotal.toFixed(2) %></span>
+                </div>
+                <% if (cart.discount > 0) { %>
+                    <div class="summary-row discount" id="discount-row">
+                        <span>Discount:</span>
+                        <span id="discount">LE <%= cart.discount.toFixed(2) %></span>
+                    </div>
+                <% } %>
+                <div class="summary-row total">
+                    <span>Total:</span>
+                    <span id="order-total">LE <%= cart.total.toFixed(2) %></span>
+                </div>
+            </div>
+        </fieldset>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Place Order</button>
+            <button type="button" class="btn btn-secondary" id="back-btn">Back to Menu</button>
+        </div>
+    </form>
+
+    <!-- Add SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+    const API_BASE_URL = '<%= process.env.API_URL || "http://localhost:5000/api" %>';
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', () => {
+        // Add back button functionality
+        document.getElementById('back-btn').addEventListener('click', () => {
+            window.location.href = '/boudz';
+        });
+
+        // Handle payment method selection
+        const cashPayment = document.getElementById('cash-payment');
+        const cardPayment = document.getElementById('card-payment');
+        const cardDetails = document.getElementById('card-details');
+        const cardInputs = cardDetails.querySelectorAll('input');
+
+        // Function to toggle card details
+        function toggleCardDetails(show) {
+            cardDetails.style.display = show ? 'block' : 'none';
+            cardInputs.forEach(input => {
+                input.required = show;
+            });
+        }
+
+        // Initial state
+        toggleCardDetails(cardPayment.checked);
+
+        cashPayment.addEventListener('change', () => {
+            toggleCardDetails(false);
+            Swal.fire({
+                icon: 'info',
+                title: 'Thank You for Choosing Cash Payment!',
+                html: `
+                    <p>We appreciate your trust in our service.</p>
+                    <p><strong>Important Notice:</strong></p>
+                    <ul style="text-align: left;">
+                        <li>Cancelling your order after 1 minute of the estimated wait time may result in account suspension.</li>
+                        <li>You can cancel your order within 1 minute without any consequences.</li>
+                    </ul>
+                `,
+                confirmButtonText: 'I Understand'
+            });
+        });
+
+        cardPayment.addEventListener('change', () => {
+            toggleCardDetails(true);
+            Swal.fire({
+                icon: 'info',
+                title: 'Credit Card Payment Information',
+                html: `
+                    <p>Thank you for choosing credit card payment.</p>
+                    <p><strong>Important Notice:</strong></p>
+                    <ul style="text-align: left;">
+                        <li>Cancelling your order after 1 minute will result in a cancellation fee (10% of total).</li>
+                        <li>You can cancel your order within 1 minute without any charges.</li>
+                    </ul>
+                `,
+                confirmButtonText: 'I Understand'
+            });
+        });
+
+        // Card number formatting
+        const cardNumber = document.getElementById('card-number');
+        cardNumber.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 16) value = value.slice(0, 16);
+            let formattedValue = '';
+            for (let i = 0; i < value.length; i++) {
+                if (i > 0 && i % 4 === 0) formattedValue += ' ';
+                formattedValue += value[i];
+            }
+            e.target.value = formattedValue;
+        });
+
+        // Expiry date formatting
+        const expiry = document.getElementById('expiry');
+        expiry.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            
+            // Handle month
+            if (value.length > 0) {
+                let month = parseInt(value.slice(0, 2));
+                if (month > 12) month = 12;
+                if (month < 1) month = 1;
+                // Add leading zero for single digits
+                value = month.toString().padStart(2, '0') + value.slice(2);
+            }
+            
+            // Add slash after month
+            if (value.length > 2) {
+                value = value.slice(0, 2) + '/' + value.slice(2);
+            }
+            
+            // Handle year
+            if (value.length > 5) {
+                let year = parseInt(value.slice(3));
+                if (year < 25) year = 25;
+                if (year > 32) year = 32;
+                value = value.slice(0, 3) + year.toString();
+            }
+            
+            e.target.value = value;
+        });
+
+        // CVV validation
+        const cvv = document.getElementById('cvv');
+        cvv.addEventListener('input', (e) => {
+            e.target.value = e.target.value.replace(/\D/g, '').slice(0, 3);
+        });
+    });
+    </script>
+    <script src="/js/hatem2.js"></script>
+</body>
+</html>
