@@ -1,0 +1,70 @@
+<!-- Admin Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/admin">Admin Panel</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="adminNavbar">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/rawan">
+                        <i class="fas fa-store"></i> Store Ordering
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<style>
+.navbar {
+    position: relative;
+    padding-left: 60px; /* Make space for the back button */
+}
+
+.back-button {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 1.1rem;
+    z-index: 1000; /* Ensure it's above other elements */
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.back-button:hover {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.back-button i {
+    font-size: 1.2rem;
+}
+
+.navbar-brand {
+    margin-left: 0; /* Remove the previous margin */
+}
+
+/* Ensure the back button is visible on mobile */
+@media (max-width: 991.98px) {
+    .navbar {
+        padding-left: 60px;
+    }
+    
+    .back-button {
+        left: 10px;
+    }
+}
+</style>
+
+<a href="/ahmed" class="back-button">
+    <i class="fas fa-arrow-left"></i> Back
+</a> 
